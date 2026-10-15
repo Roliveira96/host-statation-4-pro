@@ -77,3 +77,16 @@ button .x {
   flex: none; display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%;
   background: linear-gradient(135deg, var(--azul), var(--rosa)); font-weight: 700; color: #fff;
 }
+
+/* Campo de senha com o olhinho */
+form > label[for] { margin-bottom: -.65rem; }
+.campo-senha { position: relative; }
+.campo-senha input { padding-right: 3rem; }
+.olho {
+  position: absolute; top: 50%; right: .35rem; transform: translateY(-50%);
+  width: 2.4rem; height: 2.4rem; padding: 0; border-radius: 8px;
+  background: transparent; box-shadow: none; color: var(--suave);
+}
+.olho:hover { color: var(--texto); background: #ffffff14; filter: none; }
+.olho:active { transform: translateY(-50%); }
+.olho:focus-visible { outline: 2px solid var(--azul); outline-offset: 1px; }

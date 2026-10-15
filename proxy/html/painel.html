@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel · PlayStagiário 4</title>
-<link rel="stylesheet" href="/estilo.css?v=3">
+<link rel="stylesheet" href="/estilo.css?v=4">
 <main class="cartao">
   <p class="botoes" aria-hidden="true"><span>△</span><span>○</span><span>✕</span><span>□</span></p>
   <h1>Painel de arquivos</h1>
@@ -24,9 +24,18 @@
       <input id="usuario" name="username" autocomplete="username"
              autocapitalize="none" spellcheck="false" required>
     </label>
-    <label>Senha
+    <label for="senha">Senha</label>
+    <div class="campo-senha">
       <input id="senha" name="password" type="password" autocomplete="current-password" required>
-    </label>
+      <button type="button" id="olho" class="olho" aria-label="Mostrar senha" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+          <circle cx="12" cy="12" r="3"/>
+          <line id="olho-risco" x1="3" y1="3" x2="21" y2="21"/>
+        </svg>
+      </button>
+    </div>
     <p id="erro" class="erro" role="alert" hidden></p>
     <button id="entrar" type="submit"><span class="x" aria-hidden="true">✕</span> Entrar</button>
   </form>
@@ -63,6 +72,16 @@
       $('continuar').hidden = false;
     }
   } catch {}
+
+  // Olhinho: mostra/esconde a senha
+  $('olho').addEventListener('click', () => {
+    const mostrar = $('senha').type === 'password';
+    $('senha').type = mostrar ? 'text' : 'password';
+    $('olho').setAttribute('aria-pressed', mostrar);
+    $('olho').setAttribute('aria-label', mostrar ? 'Esconder senha' : 'Mostrar senha');
+    $('olho-risco').style.display = mostrar ? 'none' : '';
+    $('senha').focus();
+  });
 
   $('login').addEventListener('submit', async e => {
     e.preventDefault();
