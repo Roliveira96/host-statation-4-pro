@@ -1,7 +1,33 @@
 # Instalação do zero
 
+> ## 🛑 Estagiário, pare aqui!
+>
+> Este guia é para quem **monta o servidor**, não para quem usa. Você **não**
+> precisa fazer nada disto para usar o seu espaço no PS4. Tudo o que você
+> precisa está no [README](../README.md): painel, site, banco e
+> [acesso por SSH](../README.md#acesso-por-ssh).
+>
+> Rodar estes comandos no seu SSH do servidor não vai funcionar (você não tem
+> `sudo`, e ainda bem). No máximo vai gerar um e-mail do Ricardo com o assunto
+> "o que você estava tentando fazer?".
+>
+> **Exceção honrosa:** você tem um PS4 (ou qualquer PC com Linux) parado em
+> casa e quer montar **a sua própria** versão para testar, estudar ou impressionar
+> a família no almoço de domingo? Aí este guia é seu, pode seguir. Só lembre:
+>
+> - O console vai virar servidor. Seus saves vão sentir sua falta.
+> - A ventoinha vai decolar. Avise os vizinhos.
+> - Na sua máquina, **você** é o Ricardo. Os bugs agora são seus. Bem-vindo
+>   ao outro lado.
+>
+> Pronto para assumir as consequências? Pressione ✕ para continuar.
+
 Passo a passo para montar o ambiente numa máquina nova. Os passos ainda não
 implementados estão marcados como *(a fazer)*.
+
+Para replicar em outra máquina, troque `rmo.dev.br` pelo seu domínio e use
+o seu próprio túnel da Cloudflare: cada instalação tem o seu `.env`, as suas
+senhas e os seus estagiários (nem que sejam você mesmo com nomes diferentes).
 
 ## 1. Preparar a máquina
 
