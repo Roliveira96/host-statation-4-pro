@@ -132,4 +132,28 @@ scripts/estagio logs -f web-estagiario1 # erros do PHP/Apache do estagiário
 scripts/estagio restart proxy           # depois de mexer no proxy/
 ```
 
-## 7. SSH e segurança *(a fazer)*
+## 7. SSH pelo túnel
+
+O SSH do servidor continua na porta 22 e não fica exposto: quem está fora entra
+por `ssh.<dominio>`, pelo mesmo túnel.
+
+1. No túnel, em **Routes > Add route > Published application**:
+
+   | Subdomain | Domain | Path | Service URL |
+   |---|---|---|---|
+   | `ssh` | seu domínio | (vazio) | `ssh://host.docker.internal:22` |
+
+2. **Arraste essa rota para cima da `*.<dominio>`.** As rotas são lidas de
+   cima para baixo, e o coringa pegaria o `ssh` primeiro.
+3. O `compose.yaml` já dá ao conector o nome `host.docker.internal`
+   (`extra_hosts`), que é o próprio servidor visto de dentro do container.
+4. Cadastre a chave pública de cada estagiário:
+   ```bash
+   scripts/chave-ssh.sh estagiario1 id_ed25519.pub
+   ```
+
+Como conectar (Windows, macOS, Linux, VS Code): veja "Acesso por SSH" no
+README.
+
+*(a fazer: SSH dos estagiários num container isolado; login por e-mail com
+Cloudflare Access)*

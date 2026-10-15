@@ -64,6 +64,9 @@ services:
     command: tunnel --no-autoupdate run
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    # Deixa o túnel enxergar o SSH do próprio servidor (rota ssh.<dominio>)
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on: [proxy]
     networks: [estagio]
     mem_limit: 128m

@@ -58,6 +58,75 @@ recebe, com o passo a passo. Ele apaga quando subir o primeiro projeto.
 |---|---|
 | <img src="docs/prints/celular-login.png" width="280" alt="Login no celular"> | <img src="docs/prints/celular-painel.png" width="280" alt="Painel no celular"> |
 
+## Acesso por SSH
+
+O SSH também passa pelo túnel da Cloudflare: não tem porta aberta no roteador
+e funciona de qualquer lugar. O único requisito é o `cloudflared` no
+computador de quem conecta, porque é ele que leva o `ssh` até o túnel.
+
+### 1. Instalar o cloudflared (uma vez)
+
+| Sistema | Comando |
+|---|---|
+| Windows (PowerShell) | `winget install --id Cloudflare.cloudflared` |
+| macOS | `brew install cloudflared` |
+| Linux (Debian/Ubuntu) | baixe o `.deb` em [github.com/cloudflare/cloudflared/releases](https://github.com/cloudflare/cloudflared/releases) e rode `sudo apt install ./cloudflared-linux-amd64.deb` |
+
+No Windows, feche e abra o terminal depois de instalar. O `ssh` já vem no
+Windows 10 e 11.
+
+### 2. Criar sua chave SSH (estagiários)
+
+As contas não têm senha: o login é por chave.
+
+```bash
+ssh-keygen -t ed25519
+```
+
+Aperte Enter nas perguntas e mande para o administrador **só** o arquivo
+`.pub` (no Windows: `C:\Users\<você>\.ssh\id_ed25519.pub`). O outro arquivo,
+sem `.pub`, é secreto e não sai do seu computador.
+
+O administrador cadastra com:
+
+```bash
+scripts/chave-ssh.sh estagiario1 id_ed25519.pub
+```
+
+### 3. Conectar
+
+```bash
+ssh -o ProxyCommand="cloudflared access ssh --hostname %h" estagiario1@ssh.rmo.dev.br
+```
+
+Troque `estagiario1` pelo seu usuário.
+
+### Atalho opcional: `ssh ps4`
+
+Crie (ou edite) o arquivo `~/.ssh/config` (no Windows:
+`C:\Users\<você>\.ssh\config`, sem extensão):
+
+```
+Host ps4
+    HostName ssh.rmo.dev.br
+    User estagiario1
+    ProxyCommand cloudflared access ssh --hostname %h
+```
+
+Depois disso, funciona com o nome curto:
+
+```bash
+ssh ps4                          # terminal
+scp index.php ps4:public_html/   # mandar arquivo
+sftp ps4                         # SFTP (WinSCP também funciona)
+```
+
+No **VS Code**, instale a extensão *Remote - SSH*, aperte `F1`, escolha
+"Remote-SSH: Connect to Host" e selecione `ps4`.
+
+Se o Windows disser que não encontrou o `cloudflared`, use o caminho completo
+no `ProxyCommand`: `"C:\Program Files (x86)\cloudflared\cloudflared.exe"`.
+
 ## Ficha técnica do "datacenter"
 
 | Item | Especificação |
@@ -153,7 +222,9 @@ credenciais/, .env  senhas (ignorados pelo Git)
 - [x] nginx + container PHP 8.3 por estagiário
 - [x] MariaDB + phpMyAdmin com usuário por estagiário
 - [x] File Browser (painel), um por estagiário
-- [ ] SSH protegido pelo Cloudflare Access
+- [x] SSH pelo túnel (`ssh.rmo.dev.br`)
+- [ ] SSH dos estagiários num container isolado (hoje cai no sistema do servidor)
+- [ ] Login por e-mail (Cloudflare Access) na frente do SSH e do phpMyAdmin
 - [ ] Bloqueio da rede interna para os estagiários
 
 ## Segredos
