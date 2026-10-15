@@ -97,7 +97,7 @@ docs/      documentação: arquitetura, instalação, operação
 ## Progresso da campanha
 
 - [x] Script de criação de estagiário (usuário, disco, RAM)
-- [ ] Criar `estagiario1` e `estagiario2` no servidor
+- [x] Criar `estagiario1` e `estagiario2` no servidor
 - [ ] Domínio `rmo.dev.br` ativo na Cloudflare
 - [ ] Cloudflare Tunnel
 - [ ] nginx + container PHP por estagiário
