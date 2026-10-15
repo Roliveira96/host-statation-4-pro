@@ -124,8 +124,23 @@ sftp ps4                         # SFTP (WinSCP também funciona)
 No **VS Code**, instale a extensão *Remote - SSH*, aperte `F1`, escolha
 "Remote-SSH: Connect to Host" e selecione `ps4`.
 
-Se o Windows disser que não encontrou o `cloudflared`, use o caminho completo
-no `ProxyCommand`: `"C:\Program Files (x86)\cloudflared\cloudflared.exe"`.
+### Deu `CreateProcessW failed error:2` no Windows?
+
+O `ssh` não achou o `cloudflared`. Confira com `Get-Command cloudflared`:
+
+1. Se não encontrar, instale (`winget install --id Cloudflare.cloudflared`) e
+   **feche e abra o PowerShell** antes de tentar de novo.
+2. Se ainda assim não achar, descubra onde ele está:
+   ```powershell
+   Get-ChildItem -Recurse -Filter cloudflared.exe "C:\Program Files*", "$env:LOCALAPPDATA\Microsoft\WinGet" -ErrorAction SilentlyContinue | Select-Object -First 1 FullName
+   ```
+   e use o caminho completo, entre aspas, no `ProxyCommand` do `~/.ssh/config`:
+   ```
+   ProxyCommand "C:\Program Files (x86)\cloudflared\cloudflared.exe" access ssh --hostname %h
+   ```
+
+`Permission denied (publickey,password)` quer dizer que o túnel funcionou e
+falta a chave: mande seu `.pub` para o administrador.
 
 ## Ficha técnica do "datacenter"
 
