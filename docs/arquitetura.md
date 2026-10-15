@@ -18,7 +18,12 @@ Assim não precisa de IP fixo nem abrir porta no roteador. O HTTPS fica por
 conta da Cloudflare.
 
 Um registro DNS coringa `*.rmo.dev.br` aponta para o túnel, então um
-estagiário novo não exige mexer no DNS.
+estagiário novo não exige mexer no DNS. O domínio principal e o `www` têm
+registros próprios (site pessoal na Hostinger) e por isso não passam pelo
+PS4: registro específico sempre ganha do coringa.
+
+Nomes reservados, que não podem ser usados como nome de estagiário: `www`,
+`painel`, `db`, `ssh`.
 
 O certificado gratuito cobre um nível de subdomínio (`algo.rmo.dev.br`).
 Por isso:

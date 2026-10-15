@@ -90,10 +90,14 @@ O túnel é gerenciado pelo painel da Cloudflare; aqui só roda o conector
    | Subdomain | Domain | Path | Service URL |
    |---|---|---|---|
    | `*` | seu domínio | (vazio) | `http://estagio-proxy:80` |
-   | (vazio) | seu domínio | (vazio) | `http://estagio-proxy:80` |
 
-   O DNS é criado automaticamente. Se a segunda rota reclamar de registro já
-   existente, apague o registro A antigo do domínio em **DNS > Records**.
+   O DNS (`CNAME *`) é criado automaticamente.
+
+   O coringa só pega subdomínios que não têm registro próprio. Assim o domínio
+   principal e o `www` podem continuar apontando para outro lugar (no nosso
+   caso, o site pessoal na Hostinger), e o e-mail (MX) não é afetado. Se
+   quiser que o domínio principal também caia aqui, crie uma rota com
+   Subdomain vazio e apague o registro A antigo dele.
 
    Use `http://estagio-proxy:80`, não `localhost`: o conector roda num
    container, e `estagio-proxy` é o nginx na rede Docker.
