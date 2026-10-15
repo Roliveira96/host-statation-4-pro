@@ -16,6 +16,7 @@ HOME_DIR="/home/$NOME"
 
 [[ $EUID -eq 0 ]] || { echo "rode com sudo"; exit 1; }
 [[ $NOME =~ ^[a-z][a-z0-9-]{1,30}$ ]] || { echo "nome inválido (use minúsculas, números e hífen)"; exit 1; }
+case $NOME in www|painel|db|ssh|api|mail) echo "\"$NOME\" é reservado (vira subdomínio do sistema)"; exit 1;; esac
 
 echo "== $NOME: disco $DISCO, RAM $RAM"
 

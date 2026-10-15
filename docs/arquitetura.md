@@ -23,7 +23,7 @@ registros próprios (site pessoal na Hostinger) e por isso não passam pelo
 PS4: registro específico sempre ganha do coringa.
 
 Nomes reservados, que não podem ser usados como nome de estagiário: `www`,
-`painel`, `db`, `ssh`.
+`painel`, `db`, `ssh`, `api`, `mail` (o script recusa).
 
 O certificado gratuito cobre um nível de subdomínio (`algo.rmo.dev.br`).
 Por isso:
