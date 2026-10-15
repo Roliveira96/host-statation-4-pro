@@ -3,7 +3,7 @@
 #   - usuário Linux sem senha (login será por chave SSH / painel)
 #   - home num disco virtual próprio de 50 GB (o kernel do PS4 não tem quota)
 #   - limite de 3 GB de RAM somando sessões SSH + containers (user-UID.slice)
-# Uso: sudo ./novo-estagiario.sh <nome> [tamanho_disco] [limite_ram]
+# Uso: sudo scripts/novo-estagiario.sh <nome> [tamanho_disco] [limite_ram]
 # Pode rodar de novo com segurança: só cria o que estiver faltando.
 set -euo pipefail
 
@@ -42,7 +42,7 @@ if ! id "$NOME" &>/dev/null; then
     passwd -l "$NOME" >/dev/null
 fi
 cp -rn /etc/skel/. "$HOME_DIR"/ 2>/dev/null || true
-mkdir -p "$HOME_DIR/public_html"
+mkdir -p "$HOME_DIR/public_html" "$HOME_DIR/privado"   # privado: nunca vai para o site
 [[ -f $HOME_DIR/public_html/index.html ]] || cat > "$HOME_DIR/public_html/index.html" <<EOF
 <!doctype html><meta charset="utf-8"><title>$NOME</title>
 <h1>Olá, $NOME!</h1><p>Seu espaço está pronto. Suba seus projetos em <code>public_html</code>.</p>
@@ -64,3 +64,11 @@ EOF
 systemctl daemon-reload
 
 echo "   ok: uid $USER_UID, home $HOME_DIR ($(df -h --output=size "$HOME_DIR" | tail -1 | tr -d ' '))"
+
+# 5. Liga os serviços (containers, painel, banco) como o administrador,
+#    que é quem está no grupo docker
+if [[ -n ${SUDO_USER:-} ]] && command -v docker >/dev/null; then
+    sudo -u "$SUDO_USER" "$(dirname "$(readlink -f "$0")")/ativar-estagiario.sh" "$NOME"
+else
+    echo "   agora rode, sem sudo: scripts/ativar-estagiario.sh $NOME"
+fi

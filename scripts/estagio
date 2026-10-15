@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Atalho para o docker compose do projeto: junta compose.yaml com os
+# arquivos de cada estagiário (estagiarios/<nome>.yaml).
+# Exemplos:  scripts/estagio up -d      scripts/estagio ps      scripts/estagio logs -f web-estagiario1
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+arquivos=compose.yaml
+for f in estagiarios/*.yaml; do
+    [[ $f == estagiarios/_modelo.yaml ]] || arquivos+=":$f"
+done
+
+COMPOSE_FILE=$arquivos exec docker compose "$@"

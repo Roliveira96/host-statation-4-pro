@@ -1,0 +1,74 @@
+# nginx na frente de tudo: decide pelo subdomínio para onde vai cada visita.
+# ${DOMINIO} é preenchido pelo nginx a partir da variável de ambiente.
+
+# DNS interno do Docker: acha web-<nome> e painel-<nome> na hora da visita,
+# então estagiário novo não exige mexer aqui
+resolver 127.0.0.11 valid=10s ipv6=off;
+
+server_tokens off;
+client_max_body_size 100m;
+
+# Atrás da Cloudflare, o IP do visitante vem no CF-Connecting-IP
+map $http_cf_connecting_ip $ip_visitante {
+    ""      $remote_addr;
+    default $http_cf_connecting_ip;
+}
+map $http_x_forwarded_proto $protocolo {
+    ""      $scheme;
+    default $http_x_forwarded_proto;
+}
+
+proxy_http_version 1.1;
+proxy_set_header Host              $host;
+proxy_set_header X-Real-IP         $ip_visitante;
+proxy_set_header X-Forwarded-For   $ip_visitante;
+proxy_set_header X-Forwarded-Proto $protocolo;
+proxy_set_header Upgrade           $http_upgrade;
+proxy_set_header Connection        $http_connection;
+
+# Domínio principal: a página do PS4
+server {
+    listen 80 default_server;
+    server_name ${DOMINIO} www.${DOMINIO};
+    root /usr/share/nginx/html;
+    location / { try_files $uri $uri/ =404; }
+}
+
+# phpMyAdmin
+server {
+    listen 80;
+    server_name db.${DOMINIO};
+    location / {
+        set $alvo phpmyadmin;
+        proxy_pass http://$alvo:80;
+    }
+}
+
+# Painel de arquivos: painel.<dominio>/<nome>/
+server {
+    listen 80;
+    server_name painel.${DOMINIO};
+    root /usr/share/nginx/html;
+    error_page 502 504 =404 /sem-estagiario.html;
+
+    location = / { try_files /painel.html =404; }
+    location ~ ^/(?<usuario>[a-z][a-z0-9-]+)(/|$) {
+        proxy_request_buffering off;
+        proxy_pass http://painel-$usuario:8080;
+    }
+}
+
+# Sites dos estagiários: <nome>.<dominio>
+server {
+    listen 80;
+    server_name ~^(?<usuario>[a-z][a-z0-9-]+)\.${DOMINIO}$;
+    error_page 502 504 =404 /sem-estagiario.html;
+
+    location / {
+        proxy_pass http://web-$usuario:8080;
+    }
+    location = /sem-estagiario.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+}

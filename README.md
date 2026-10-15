@@ -19,6 +19,9 @@ da carreira: hospedar o primeiro `index.php` do estagiário.
 | `db.rmo.dev.br` | phpMyAdmin, com usuário próprio (o `DROP DATABASE` acidental só destrói o que é dele) |
 | `ssh.rmo.dev.br` | SSH/SFTP, para os que já descobriram o terminal |
 
+Na home, `public_html/` vai para o site e `privado/` nunca vai: lugar de
+guardar o que não é para o mundo ver (anotações, backups, segredos do PHP).
+
 > Usando este projeto? Troque `rmo.dev.br` pelo seu domínio.
 
 ## Ficha técnica do "datacenter"
@@ -82,27 +85,37 @@ O PS4 e o colega continuam firmes.
 Siga [docs/instalacao.md](docs/instalacao.md). O começo:
 
 ```bash
-# cria cada estagiário: usuário, disco de 50 GB e limite de 3 GB de RAM
+cp .env.example .env                       # preencha domínio e senha do MariaDB
+
+# cria o estagiário (usuário, disco de 50 GB, 3 GB de RAM) e já liga tudo dele
 sudo scripts/novo-estagiario.sh estagiario1
-sudo scripts/novo-estagiario.sh estagiario2
+
+scripts/estagio ps                         # docker compose do projeto inteiro
 ```
+
+As senhas geradas ficam em `credenciais/<nome>.txt`, fora do Git.
 
 ## Estrutura
 
 ```
-scripts/   scripts de administração (rodar com sudo)
-docs/      documentação: arquitetura, instalação, operação
+compose.yaml        serviços compartilhados: nginx, MariaDB, phpMyAdmin
+estagiarios/        modelo dos containers de cada estagiário (web + painel)
+imagens/php/        imagem Apache + PHP 8.3 que roda como o estagiário
+proxy/              config do nginx e as páginas temáticas
+scripts/            novo-estagiario.sh (sudo), ativar-estagiario.sh, estagio
+docs/               arquitetura e instalação
+credenciais/, .env  senhas (ignorados pelo Git)
 ```
 
 ## Progresso da campanha
 
 - [x] Script de criação de estagiário (usuário, disco, RAM)
 - [x] Criar `estagiario1` e `estagiario2` no servidor
-- [ ] Domínio `rmo.dev.br` ativo na Cloudflare
+- [x] Domínio `rmo.dev.br` apontado para a Cloudflare
 - [ ] Cloudflare Tunnel
-- [ ] nginx + container PHP por estagiário
-- [ ] MariaDB + phpMyAdmin com usuário por estagiário
-- [ ] File Browser (painel)
+- [x] nginx + container PHP 8.3 por estagiário
+- [x] MariaDB + phpMyAdmin com usuário por estagiário
+- [x] File Browser (painel), um por estagiário
 - [ ] SSH protegido pelo Cloudflare Access
 - [ ] Bloqueio da rede interna para os estagiários
 

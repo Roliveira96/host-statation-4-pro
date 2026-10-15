@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayStagiário 4</title>
+<link rel="stylesheet" href="/estilo.css">
+<main>
+  <p class="botoes"><span>△</span><span>○</span><span>✕</span><span>□</span></p>
+  <h1>PlayStagiário 4</h1>
+  <p class="sub">Este site está sendo servido por um PlayStation 4 velho numa estante.</p>
+  <p>Ele já salvou Kratos, Aloy e o Spider-Man. Agora hospeda projetos de estagiários.
+     A ventoinha discorda, mas segue firme.</p>
+  <ul>
+    <li><b>Site de cada estagiário:</b> <code>nome.<span class="dominio"></span></code></li>
+    <li><b>Painel de arquivos:</b> <code>painel.<span class="dominio"></span>/nome</code></li>
+    <li><b>Banco de dados:</b> <code>db.<span class="dominio"></span></code></li>
+  </ul>
+  <p class="rodape">SLA: funciona na minha casa.</p>
+</main>
+<script>
+  document.querySelectorAll('.dominio').forEach(e => e.textContent = location.hostname.replace(/^www\./, ''));
+</script>
+</html>

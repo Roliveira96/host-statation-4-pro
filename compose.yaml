@@ -1,0 +1,61 @@
+# Serviços compartilhados. Os containers de cada estagiário ficam em
+# estagiarios/<nome>.yaml, gerados por scripts/ativar-estagiario.sh.
+# Use sempre scripts/estagio (ele junta tudo): scripts/estagio up -d
+name: estagio
+
+services:
+  proxy:
+    image: nginx:1.28-alpine
+    container_name: estagio-proxy
+    ports:
+      - "80:80"
+    environment:
+      DOMINIO: ${DOMINIO}
+    volumes:
+      - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./proxy/html:/usr/share/nginx/html:ro
+    networks: [estagio]
+    mem_limit: 64m
+    restart: unless-stopped
+
+  mariadb:
+    image: mariadb:11.4
+    container_name: estagio-mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    # Configuração enxuta: o "datacenter" tem 7,6 GB para tudo
+    command: >-
+      --innodb-buffer-pool-size=128M
+      --max-connections=60
+      --performance-schema=OFF
+    volumes:
+      - mariadb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      retries: 10
+    networks: [estagio]
+    mem_limit: 512m
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2-apache
+    container_name: estagio-phpmyadmin
+    environment:
+      PMA_HOST: mariadb
+      UPLOAD_LIMIT: 100M
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks: [estagio]
+    mem_limit: 256m
+    restart: unless-stopped
+
+networks:
+  estagio:
+    name: estagio
+
+volumes:
+  mariadb:

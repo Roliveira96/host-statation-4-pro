@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel · PlayStagiário 4</title>
+<link rel="stylesheet" href="/estilo.css">
+<main>
+  <p class="botoes"><span>△</span><span>○</span><span>✕</span><span>□</span></p>
+  <h1>Painel de arquivos</h1>
+  <p class="sub">Pressione START para continuar.</p>
+  <form id="f">
+    <label for="nome">Seu usuário</label>
+    <input id="nome" placeholder="estagiario1" pattern="[a-z][a-z0-9\-]+" required autofocus>
+    <button>Entrar</button>
+  </form>
+</main>
+<script>
+  document.getElementById('f').addEventListener('submit', e => {
+    e.preventDefault();
+    location.href = '/' + document.getElementById('nome').value.trim().toLowerCase() + '/';
+  });
+</script>
+</html>

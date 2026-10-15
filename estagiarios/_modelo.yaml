@@ -1,0 +1,43 @@
+# Modelo usado por scripts/ativar-estagiario.sh.
+# __NOME__, __UID__ e __GID__ são trocados pelos dados do estagiário.
+# Os dois containers rodam como o estagiário e ficam dentro da slice dele,
+# então somam no limite de RAM dele (MemoryMax de user-__UID__.slice).
+services:
+  web-__NOME__:
+    image: estagio-php:8.3
+    build: ./imagens/php
+    container_name: web-__NOME__
+    user: "__UID__:__GID__"
+    cgroup_parent: user-__UID__.slice
+    environment:
+      HOME_ESTAGIARIO: /home/__NOME__
+    volumes:
+      - /home/__NOME__:/home/__NOME__
+    tmpfs:
+      - /tmp
+    networks: [estagio]
+    restart: unless-stopped
+
+  painel-__NOME__:
+    image: filebrowser/filebrowser:v2.31.2
+    container_name: painel-__NOME__
+    user: "__UID__:__GID__"
+    cgroup_parent: user-__UID__.slice
+    command:
+      - --database=/dados/filebrowser.db
+      - --root=/home/__NOME__
+      - --baseurl=/__NOME__
+      - --address=0.0.0.0
+      - --port=8080
+    volumes:
+      - /home/__NOME__:/home/__NOME__
+      - painel-__NOME__:/dados          # banco do painel, fora da home do estagiário
+    healthcheck:
+      disable: true
+    networks: [estagio]
+    restart: unless-stopped
+
+volumes:
+  painel-__NOME__:
+    name: estagio-painel-__NOME__
+    external: true                       # criado por ativar-estagiario.sh

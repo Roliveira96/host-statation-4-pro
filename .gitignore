@@ -1,9 +1,13 @@
 # segredos (senhas, tokens do túnel)
 .env
 *.env
-!*.env.example
-credentials/
+!.env.example
+credenciais/
 *.json.cred
+
+# arquivos gerados por estagiário (têm nomes reais; o modelo fica)
+estagiarios/*.yaml
+!estagiarios/_modelo.yaml
 
 # discos dos estagiários e dados de serviços
 *.img
