@@ -154,7 +154,7 @@ falta a chave: mande seu `.pub` para o administrador.
 | Disco | um arquivo `.img` dentro do HD do PS4 (é Linux dentro de um arquivo dentro de um console) |
 | Rede | Wi-Fi/cabo de casa, IP dinâmico, NAT, e a fé na Cloudflare |
 | Refrigeração | a ventoinha do PS4, que soa como um avião decolando |
-| Uptime | até alguém tropeçar no cabo |
+| Uptime | até alguém tropeçar no cabo, ou o Ricardo decidir jogar RetroArch ou algum joguinho de plataforma 2D |
 | SLA | "funciona na minha casa" |
 
 ## Como funciona
