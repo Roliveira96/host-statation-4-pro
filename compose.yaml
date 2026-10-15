@@ -46,6 +46,8 @@ services:
     environment:
       PMA_HOST: mariadb
       UPLOAD_LIMIT: 100M
+    volumes:
+      - ./config/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro
     depends_on:
       mariadb:
         condition: service_healthy

@@ -1,0 +1,9 @@
+{
+  "name": "playstagiario-prints",
+  "private": true,
+  "type": "module",
+  "description": "Tira os prints do README entrando como um estagiário",
+  "dependencies": {
+    "puppeteer-core": "24.10.0"
+  }
+}

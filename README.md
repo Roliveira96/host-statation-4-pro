@@ -24,6 +24,40 @@ guardar o que não é para o mundo ver (anotações, backups, segredos do PHP).
 
 > Usando este projeto? Troque `rmo.dev.br` pelo seu domínio.
 
+## Tour pelo console
+
+Prints tirados entrando como `estagiario1` (refaça com `node scripts/prints/tirar.mjs`).
+
+**Login do painel:** usuário e senha na mesma tela, já cai na pasta do estagiário.
+
+![Login do painel](docs/prints/painel-login.png)
+
+**Painel de arquivos:** cada um vê só a própria home. `public_html` vai para o
+site, `privado` nunca vai.
+
+| Home | Dentro do `public_html` |
+|---|---|
+| ![Painel: home](docs/prints/painel-home.png) | ![Painel: public_html](docs/prints/painel-public_html.png) |
+
+**Site do estagiário:** a página de boas-vindas que todo estagiário novo
+recebe, com o passo a passo. Ele apaga quando subir o primeiro projeto.
+
+![Página de boas-vindas](docs/prints/site-boas-vindas.png)
+
+**phpMyAdmin:** em português, cada um com seu usuário e só os próprios bancos.
+
+![phpMyAdmin](docs/prints/phpmyadmin.png)
+
+**Subdomínio sem dono:** o PS4 avisa que o slot de save está vazio.
+
+![Slot vazio](docs/prints/slot-vazio.png)
+
+**No celular:**
+
+| Login | Painel |
+|---|---|
+| <img src="docs/prints/celular-login.png" width="280" alt="Login no celular"> | <img src="docs/prints/celular-painel.png" width="280" alt="Painel no celular"> |
+
 ## Ficha técnica do "datacenter"
 
 | Item | Especificação |
@@ -98,12 +132,15 @@ As senhas geradas ficam em `credenciais/<nome>.txt`, fora do Git.
 ## Estrutura
 
 ```
-compose.yaml        serviços compartilhados: nginx, MariaDB, phpMyAdmin
+compose.yaml        serviços compartilhados: nginx, MariaDB, phpMyAdmin, túnel
 estagiarios/        modelo dos containers de cada estagiário (web + painel)
 imagens/php/        imagem Apache + PHP 8.3 que roda como o estagiário
-proxy/              config do nginx e as páginas temáticas
+proxy/              config do nginx, tela de login do painel e páginas temáticas
+modelos/            página de boas-vindas que cada estagiário recebe
+config/             ajustes do phpMyAdmin (português, bancos de sistema escondidos)
 scripts/            novo-estagiario.sh (sudo), ativar-estagiario.sh, estagio
-docs/               arquitetura e instalação
+scripts/prints/     tira os prints deste README entrando como estagiário
+docs/               arquitetura, instalação e prints
 credenciais/, .env  senhas (ignorados pelo Git)
 ```
 

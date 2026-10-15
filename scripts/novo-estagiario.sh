@@ -42,12 +42,9 @@ if ! id "$NOME" &>/dev/null; then
     useradd --home-dir "$HOME_DIR" --no-create-home --shell /bin/bash --user-group "$NOME"
     passwd -l "$NOME" >/dev/null
 fi
-cp -rn /etc/skel/. "$HOME_DIR"/ 2>/dev/null || true
+# Sem os arquivos do /etc/skel (.bashrc etc.): o painel mostraria e daria para
+# apagar sem querer. A página de boas-vindas é criada por ativar-estagiario.sh.
 mkdir -p "$HOME_DIR/public_html" "$HOME_DIR/privado"   # privado: nunca vai para o site
-[[ -f $HOME_DIR/public_html/index.html ]] || cat > "$HOME_DIR/public_html/index.html" <<EOF
-<!doctype html><meta charset="utf-8"><title>$NOME</title>
-<h1>Olá, $NOME!</h1><p>Seu espaço está pronto. Suba seus projetos em <code>public_html</code>.</p>
-EOF
 rm -rf "$HOME_DIR/lost+found"
 chown -R "$NOME:$NOME" "$HOME_DIR"
 chmod 750 "$HOME_DIR"     # outros estagiários não entram

@@ -1,0 +1,55 @@
+<!doctype html>
+<!-- boas-vindas-playstagiario: pode apagar ou substituir este arquivo à vontade -->
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__NOME__ · PlayStagiário 4</title>
+<style>
+  :root { --texto: #e8ecf6; --suave: #aab3cc; --azul: #6b8cff; color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1rem;
+    background:
+      radial-gradient(ellipse at 20% 0%, #2a3a8c55, transparent 55%),
+      radial-gradient(ellipse at 90% 100%, #00439c44, transparent 50%),
+      linear-gradient(160deg, #0d1430, #0b1020 60%);
+    color: var(--texto); font: 16px/1.6 system-ui, sans-serif;
+  }
+  main {
+    max-width: 40rem; width: 100%; padding: 2rem 1.75rem;
+    background: #ffffff0d; border: 1px solid #ffffff1f; border-radius: 18px;
+    box-shadow: 0 30px 80px -20px #0008;
+  }
+  .botoes { display: flex; gap: .7rem; margin: 0; }
+  .botoes svg { display: block; width: 1.5rem; height: 1.5rem; }
+  .botoes span:nth-child(1) { color: #3ec9a7; }
+  .botoes span:nth-child(2) { color: #ff6b6b; }
+  .botoes span:nth-child(3) { color: var(--azul); }
+  .botoes span:nth-child(4) { color: #e58ad8; }
+  h1 { font-size: clamp(1.9rem, 6vw, 2.6rem); margin: .6rem 0 0; line-height: 1.15; letter-spacing: -.02em; }
+  .sub { color: var(--azul); font-weight: 600; margin: .3rem 0 1.5rem; }
+  p, li { color: var(--suave); }
+  b { color: var(--texto); }
+  code { background: #ffffff14; padding: .1em .4em; border-radius: 4px; color: var(--texto); }
+  a { color: var(--azul); }
+  ol { padding-left: 1.3rem; display: grid; gap: .5rem; }
+  .rodape { margin: 1.5rem 0 0; font-size: .85rem; }
+</style>
+<main>
+  <p class="botoes" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5 20.5 19h-17z"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="4.6" y="4.6" width="14.8" height="14.8" rx="1"/></svg></span></p>
+  <h1>Olá, __NOME__!</h1>
+  <p class="sub">Novo jogo iniciado. Seu espaço no PS4 está pronto.</p>
+
+  <ol>
+    <li>Entre no <a href="https://painel.__DOMINIO__/">painel de arquivos</a> com seu usuário e senha.</li>
+    <li>Suba seus projetos em <code>public_html</code>. Cada pasta vira um endereço:
+        <code>public_html/loja</code> aparece em <code>__NOME__.__DOMINIO__/loja</code>.</li>
+    <li>O que não é para o mundo ver vai em <code>privado</code>. Essa pasta nunca aparece no site.</li>
+    <li>Precisa de banco? Use o <a href="https://db.__DOMINIO__/">phpMyAdmin</a>.
+        Seus bancos têm que começar com <code>__NOME___</code>, e no PHP o servidor é <code>mariadb</code>.</li>
+  </ol>
+
+  <p>Este arquivo é o <code>public_html/index.html</code>. Pode apagar ou trocar pelo seu projeto.</p>
+  <p class="rodape">Servido por um PlayStation 4 numa estante. Seja gentil com a ventoinha.</p>
+</main>
+</html>

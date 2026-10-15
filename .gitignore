@@ -12,3 +12,4 @@ estagiarios/*.yaml
 # discos dos estagiários e dados de serviços
 *.img
 data/
+node_modules/

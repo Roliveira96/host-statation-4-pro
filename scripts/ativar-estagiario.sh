@@ -48,9 +48,20 @@ fi
 #    public_html = site; privado = nunca vai para o site
 #    O banco do File Browser fica num volume próprio (fora da home), criado com
 #    o usuário antes do primeiro start: sem isso ele nasceria com admin/admin.
+#    A página de boas-vindas (modelos/boas-vindas.html) só entra se não houver
+#    index.html ou se o que existe ainda é uma boas-vindas nossa; projeto do
+#    estagiário nunca é sobrescrito.
 docker run --rm --user "$USER_UID:$USER_GID" -v "/home/$NOME:/home/$NOME" \
-    --entrypoint sh filebrowser/filebrowser:v2.31.2 \
-    -c "mkdir -p /home/$NOME/public_html /home/$NOME/privado; rm -rf /home/$NOME/.painel"
+    -v "$PWD/modelos/boas-vindas.html:/modelo.html:ro" \
+    -e NOME="$NOME" -e DOMINIO="$DOMINIO" \
+    --entrypoint sh filebrowser/filebrowser:v2.31.2 -c '
+    set -e
+    cd "/home/$NOME"
+    mkdir -p public_html privado
+    INDEX=public_html/index.html
+    if [ ! -e "$INDEX" ] || grep -qE "boas-vindas-playstagiario|Seu espaço está pronto" "$INDEX"; then
+        sed -e "s/__NOME__/$NOME/g" -e "s/__DOMINIO__/$DOMINIO/g" /modelo.html > "$INDEX"
+    fi'
 docker volume create "estagio-painel-$NOME" >/dev/null
 docker stop "painel-$NOME" >/dev/null 2>&1 || true   # o banco do painel não aceita dois processos
 docker run --rm -v "estagio-painel-$NOME:/dados" \
@@ -62,6 +73,11 @@ docker run --rm -v "estagio-painel-$NOME:/dados" \
         /filebrowser -d "$DB" config init --root "/home/$NOME" --baseurl "/$NOME" \
             --branding.name "PlayStagiário 4 · $NOME" --auth.method json \
             --locale pt-br --perm.execute=false --commands "" >/dev/null 2>&1
+    fi
+    # Arquivos ocultos da raiz da home (.bashrc, .ssh...) não aparecem no painel.
+    # Só na raiz: o .htaccess dos projetos continua visível.
+    if ! /filebrowser -d "$DB" rules ls 2>/dev/null | grep -qF "^/\\."; then
+        /filebrowser -d "$DB" rules add "^/\\." --regex >/dev/null 2>&1
     fi
     # Visual: tema escuro, combinando com a tela de login do PlayStagiário 4
     /filebrowser -d "$DB" config set --branding.theme dark \
