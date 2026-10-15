@@ -11,6 +11,18 @@ sudo usermod -aG docker $USER      # só o administrador, nunca estagiários
 docker info | grep -i "cgroup"     # precisa ser: systemd e versão 2
 ```
 
+Depois de clonar o repositório (passo 2), ajuste o sistema uma vez:
+
+```bash
+sudo scripts/configurar-sistema.sh
+```
+
+Ele liga a swap comprimida na RAM (zram, metade da RAM, zstd) e ajusta
+`swappiness`/`page-cluster` para ela. Swap em disco foi evitada de propósito:
+o disco do PS4 é lento e o sistema roda dentro de um arquivo `.img`, onde swap
+pode travar justamente quando falta memória. Os estagiários continuam sem swap
+(`MemorySwapMax=0`): a zram é reserva do sistema e dos serviços.
+
 ## 2. Clonar e configurar
 
 ```bash

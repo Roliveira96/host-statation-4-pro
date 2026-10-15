@@ -8,7 +8,25 @@ ganha seu cantinho estilo Hostinger: site próprio, banco de dados, painel de
 arquivos e um console que já rodou God of War segurando o código PHP dele.
 
 Ele já salvou Kratos, Aloy e o Spider-Man. Agora tem a missão mais difícil
-da carreira: hospedar o primeiro `index.php` do estagiário.
+da carreira: hospedar o primeiro `index.php` do estagiário. Aquele com
+`<?php echo "teste"; ?>` e três `var_dump` esquecidos.
+
+> ⚠️ Nenhum console foi maltratado na produção deste projeto. Ele só foi
+> promovido de "centro de entretenimento" para "infraestrutura crítica" sem
+> aumento salarial.
+
+## 🏆 Troféus desbloqueados
+
+| Troféu | Como conseguir |
+|---|---|
+| 🥉 **Hello, World** | Subir o primeiro `index.php` |
+| 🥉 **Erro 500 com orgulho** | Ver o primeiro erro do PHP na tela (o `display_errors` está ligado, é de propósito) |
+| 🥉 **Prefixo é lei** | Tentar criar um banco sem o prefixo `<nome>_` e ser barrado |
+| 🥈 **Inquilino respeitoso** | Passar uma semana sem bater no limite de 3 GB de RAM |
+| 🥈 **Mão no terminal** | Entrar por `ssh ps4` pela primeira vez |
+| 🥈 **Ventoinha decolou** | Rodar algo pesado o bastante para a ventoinha do PS4 virar turbina |
+| 🥇 **Sobrevivente** | Dar `DROP DATABASE` no banco errado e descobrir que só podia apagar os seus |
+| 🏆 **Platina** | Entregar o projeto antes do prazo (ninguém conseguiu ainda) |
 
 ## O que o estagiário ganha
 
@@ -147,15 +165,19 @@ falta a chave: mande seu `.pub` para o administrador.
 
 | Item | Especificação |
 |---|---|
-| Servidor | PlayStation 4, aposentado do sofá |
-| CPU | AMD Jaguar, 8 núcleos (os mesmos que faziam 30 fps no Bloodborne) |
-| RAM | 7,6 GB, compartilhados com a GPU, dividindo como irmãos |
-| Swap | nenhum, vivemos perigosamente |
-| Disco | um arquivo `.img` dentro do HD do PS4 (é Linux dentro de um arquivo dentro de um console) |
-| Rede | Wi-Fi/cabo de casa, IP dinâmico, NAT, e a fé na Cloudflare |
-| Refrigeração | a ventoinha do PS4, que soa como um avião decolando |
+| Servidor | PlayStation 4, aposentado do sofá e promovido a servidor de produção sem ninguém perguntar a opinião dele |
+| CPU | AMD Jaguar, 8 núcleos (os mesmos que faziam 30 fps no Bloodborne, quando estavam de bom humor) |
+| GPU | Radeon com 32 CUs que já renderizou Los Santos inteira e agora fica olhando para o teto enquanto o PHP trabalha |
+| RAM | 7,6 GB, compartilhados com a GPU, dividindo como irmãos no banco de trás |
+| Swap | zram: a RAM comprime a própria RAM. É tipo guardar roupa em saco a vácuo, só que com bytes |
+| Disco | um arquivo `.img` dentro do HD do PS4. É Linux dentro de um arquivo dentro de um console. Inception de pobre |
+| Rede | Wi-Fi/cabo de casa, IP dinâmico, NAT, e a fé inabalável na Cloudflare |
+| Refrigeração | a ventoinha do PS4, que soa como um Boeing decolando sempre que alguém roda `composer install` |
+| Localização | estante da sala, entre um controle sem bateria e um fone que só funciona de um lado |
 | Uptime | até alguém tropeçar no cabo, ou o Ricardo decidir jogar RetroArch ou algum joguinho de plataforma 2D |
 | SLA | "funciona na minha casa" |
+| Backup | está no roadmap desde o primeiro commit, como todo backup que se preze |
+| Suporte | gritar "RICARDO" pela casa |
 
 ## Como funciona
 
@@ -175,7 +197,8 @@ Internet ─► Cloudflare (DNS + HTTPS) ─► Cloudflare Tunnel ─► PS4 na 
 
 O túnel da Cloudflare sai de dentro do PS4 para a internet, então não precisa
 de IP fixo nem abrir porta no roteador. O roteador nem fica sabendo que virou
-provedor de hospedagem.
+provedor de hospedagem. Se a operadora perguntar, é só um PS4 baixando
+atualização. Há três anos.
 
 Detalhes e o porquê de cada escolha: [docs/arquitetura.md](docs/arquitetura.md).
 
@@ -190,7 +213,11 @@ Porque a RAM é finita e o entusiasmo do estagiário, não.
 | Banco | só bancos `<nome>_*` | usuário MariaDB com permissão por prefixo |
 
 Passou do limite? O kernel encerra o processo do estagiário, e só o dele.
-O PS4 e o colega continuam firmes.
+O PS4 e o colega continuam firmes. É o equivalente digital de "quem quebrou,
+paga", só que sem o boleto.
+
+O loop infinito de um estagiário nunca derruba o site do outro. Já o loop
+infinito do Ricardo pode derrubar tudo, mas aí é gestão.
 
 ## Requisitos
 
@@ -198,6 +225,7 @@ O PS4 e o colega continuam firmes.
 - Docker com cgroup driver `systemd` e Docker Compose
 - Domínio com DNS na Cloudflare (plano Free basta)
 - Um PS4 é opcional, mas recomendado pelo estilo
+- Um PS5 também serve, mas aí você é rico e devia estar pagando a AWS
 
 ## Como montar do zero
 
@@ -205,6 +233,7 @@ Siga [docs/instalacao.md](docs/instalacao.md). O começo:
 
 ```bash
 cp .env.example .env                       # preencha domínio e senha do MariaDB
+sudo scripts/configurar-sistema.sh         # swap em zram (uma vez por máquina)
 
 # cria o estagiário (usuário, disco de 50 GB, 3 GB de RAM) e já liga tudo dele
 sudo scripts/novo-estagiario.sh estagiario1
@@ -249,8 +278,9 @@ estagiarios/        modelo dos containers de cada estagiário (web + painel)
 imagens/php/        imagem Apache + PHP 8.3 que roda como o estagiário
 proxy/              config do nginx, tela de login do painel e páginas temáticas
 modelos/            página de boas-vindas que cada estagiário recebe
-config/             ajustes do phpMyAdmin (português, bancos de sistema escondidos)
-scripts/            novo-estagiario.sh (sudo), ativar-estagiario.sh, estagio
+config/             phpMyAdmin (português) e sistema (swap em zram)
+scripts/            configurar-sistema.sh e novo-estagiario.sh (sudo), ativar-estagiario.sh,
+                    chave-ssh.sh, estagio
 scripts/prints/     tira os prints deste README entrando como estagiário
 docs/               arquitetura, instalação e prints
 credenciais/, .env  senhas (ignorados pelo Git)
@@ -258,6 +288,7 @@ credenciais/, .env  senhas (ignorados pelo Git)
 
 ## Progresso da campanha
 
+- [x] Swap comprimida na RAM (zram)
 - [x] Script de criação de estagiário (usuário, disco, RAM)
 - [x] Criar `estagiario1` e `estagiario2` no servidor
 - [x] Domínio `rmo.dev.br` apontado para a Cloudflare
@@ -274,7 +305,18 @@ credenciais/, .env  senhas (ignorados pelo Git)
 
 Nenhuma senha, token ou chave vive neste repositório. Elas ficam em arquivos
 `.env` ignorados pelo Git; o repositório só traz `.env.example` mostrando o que
-preencher. Se achar uma senha aqui, abra uma issue. E um chamado no RH.
+preencher. Se achar uma senha aqui, abra uma issue. E um chamado no RH. E
+troque a senha, porque a essa altura ela já está num print do grupo da família.
+
+## 📜 Notas de atualização
+
+**v1.04: "O Despertar do Console"**
+- Adicionado suporte a estagiários. Antes eram só jogos, o que era bem mais barato.
+- Corrigido bug em que o PS4 achava que ainda era um videogame.
+- O PHP agora roda como o próprio estagiário. Erros também são dele agora.
+- Adicionada swap em zram. A RAM aprendeu a fazer origami.
+- Removido o modo "Descanso". Servidor não descansa. Estagiário também não, mas esse bug é do RH.
+- Problemas conhecidos: o Ricardo às vezes quer jogar Celeste. Sem previsão de correção.
 
 ## FAQ
 
@@ -285,8 +327,36 @@ O PS4 é sério. A infra é séria. A gente só não consegue falar dela com a c
 Uns 3 a 5 com projetos leves. Depois disso o PS4 começa a fazer o barulho de
 quando você abria o Red Dead 2.
 
+**Por que não um Raspberry Pi?**
+O Raspberry Pi não tem 8 núcleos, nem GDDR5, nem a trilha sonora do God of War
+na memória afetiva. Além disso, ele não estava parado na estante.
+
 **E se a energia cair?**
 Aí todo mundo descobre ao mesmo tempo o que significa "alta disponibilidade".
+Spoiler: não temos.
 
 **Dá para jogar enquanto hospeda?**
-Não. Ele está rodando Linux. O console agora trabalha.
+Não. Ele está rodando Linux. O console agora trabalha. O máximo de diversão
+permitida é um RetroArch quando o Ricardo jura que "é rapidinho".
+
+**O site caiu. O que eu faço?**
+1. Respire.
+2. Veja se alguém tropeçou no cabo.
+3. Veja se o Ricardo está jogando.
+4. Só então abra os logs (`scripts/estagio logs -f web-<nome>`).
+
+**O estagiário pode instalar o Fortnite no servidor?**
+Pode tentar. São 3 GB de RAM, 50 GB de disco e nenhuma placa de vídeo
+liberada. Boa sorte, campeão.
+
+**Meu projeto está lento. É o PS4?**
+Provavelmente é o `SELECT *` sem `WHERE` dentro de um `foreach`. Mas pode
+culpar o PS4, ele aguenta. Já aguentou coisa pior.
+
+**A Sony sabe disso?**
+Não. E vamos manter assim.
+
+---
+
+<sub>Feito com carinho, café e um console que merecia aposentadoria. Nenhum
+estagiário foi alocado em produção sem supervisão. Pelo menos não de propósito.</sub>
