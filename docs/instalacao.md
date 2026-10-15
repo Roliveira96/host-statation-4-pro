@@ -66,7 +66,37 @@ curl -H "Host: estagiario1.$DOMINIO" http://127.0.0.1/ # site, antes do túnel
    importados.
 4. Esperar o status ficar **Active**.
 
-## 5. Cloudflare Tunnel *(a fazer)*
+## 5. Cloudflare Tunnel
+
+O túnel é gerenciado pelo painel da Cloudflare; aqui só roda o conector
+(`estagio-cloudflared`, no `compose.yaml`).
+
+1. No painel da Cloudflare: **Networks > Tunnels > Create a tunnel**, tipo
+   **Cloudflared**, nome `ps4`. (O menu muda de nome às vezes; procure
+   "Tunnels".)
+2. Na tela de instalação, escolha Docker e copie o token (o texto depois de
+   `--token`, começa com `eyJ`) para o `.env`:
+   ```
+   CLOUDFLARE_TUNNEL_TOKEN=eyJ...
+   ```
+3. Suba o conector e confira que ele registrou conexões:
+   ```bash
+   scripts/estagio up -d cloudflared
+   docker logs estagio-cloudflared 2>&1 | grep Registered
+   ```
+   O erro sobre `cert.pem` no log é normal nesse modo.
+4. No túnel, em **Routes > Add route > Published application**, crie:
+
+   | Subdomain | Domain | Path | Service URL |
+   |---|---|---|---|
+   | `*` | seu domínio | (vazio) | `http://estagio-proxy:80` |
+   | (vazio) | seu domínio | (vazio) | `http://estagio-proxy:80` |
+
+   O DNS é criado automaticamente. Se a segunda rota reclamar de registro já
+   existente, apague o registro A antigo do domínio em **DNS > Records**.
+
+   Use `http://estagio-proxy:80`, não `localhost`: o conector roda num
+   container, e `estagio-proxy` é o nginx na rede Docker.
 
 ## 6. Serviços web
 

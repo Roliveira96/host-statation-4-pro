@@ -53,6 +53,20 @@ services:
     mem_limit: 256m
     restart: unless-stopped
 
+  # Túnel até a Cloudflare: o PS4 liga para fora, então não precisa de IP fixo
+  # nem abrir porta no roteador. As rotas ficam no painel da Cloudflare
+  # (veja docs/instalacao.md, passo 5).
+  cloudflared:
+    image: cloudflare/cloudflared:2025.8.1
+    container_name: estagio-cloudflared
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on: [proxy]
+    networks: [estagio]
+    mem_limit: 128m
+    restart: unless-stopped
+
 networks:
   estagio:
     name: estagio

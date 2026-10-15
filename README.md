@@ -112,7 +112,7 @@ credenciais/, .env  senhas (ignorados pelo Git)
 - [x] Script de criação de estagiário (usuário, disco, RAM)
 - [x] Criar `estagiario1` e `estagiario2` no servidor
 - [x] Domínio `rmo.dev.br` apontado para a Cloudflare
-- [ ] Cloudflare Tunnel
+- [x] Cloudflare Tunnel (`*.rmo.dev.br` no ar)
 - [x] nginx + container PHP 8.3 por estagiário
 - [x] MariaDB + phpMyAdmin com usuário por estagiário
 - [x] File Browser (painel), um por estagiário
