@@ -3,21 +3,98 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel · PlayStagiário 4</title>
-<link rel="stylesheet" href="/estilo.css">
-<main>
-  <p class="botoes"><span>△</span><span>○</span><span>✕</span><span>□</span></p>
+<link rel="stylesheet" href="/estilo.css?v=3">
+<main class="cartao">
+  <p class="botoes" aria-hidden="true"><span>△</span><span>○</span><span>✕</span><span>□</span></p>
   <h1>Painel de arquivos</h1>
-  <p class="sub">Pressione START para continuar.</p>
-  <form id="f">
-    <label for="nome">Seu usuário</label>
-    <input id="nome" placeholder="estagiario1" pattern="[a-z][a-z0-9\-]+" required autofocus>
-    <button>Entrar</button>
+  <p class="sub">Selecione seu perfil para continuar.</p>
+
+  <!-- Quem já tem sessão salva neste navegador -->
+  <div id="continuar" class="perfil" hidden>
+    <span class="avatar" id="avatar"></span>
+    <div>
+      <b id="perfil-nome"></b>
+      <small>sessão salva neste navegador</small>
+    </div>
+    <a class="botao" id="perfil-ir" href="#">Continuar</a>
+  </div>
+
+  <form id="login" novalidate>
+    <label>Usuário
+      <input id="usuario" name="username" autocomplete="username" placeholder="estagiario1"
+             autocapitalize="none" spellcheck="false" required>
+    </label>
+    <label>Senha
+      <input id="senha" name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="erro" class="erro" role="alert" hidden></p>
+    <button id="entrar" type="submit"><span class="x" aria-hidden="true">✕</span> Entrar</button>
   </form>
+
+  <p class="rodape">Esqueceu a senha? Fale com quem cuida do PS4.</p>
 </main>
 <script>
-  document.getElementById('f').addEventListener('submit', e => {
+  // Faz o login direto no File Browser do estagiário (/<usuario>/api/login) e
+  // guarda o token do jeito que o próprio File Browser guarda (cookie "auth" +
+  // localStorage "jwt"), então ele já abre logado.
+  const $ = id => document.getElementById(id);
+
+  function lerToken(token) {
+    try {
+      const dados = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return dados.exp * 1000 > Date.now() ? dados : null;
+    } catch { return null; }
+  }
+
+  function guardarSessao(token) {
+    document.cookie = 'auth=' + token + '; Path=/; SameSite=Strict; Secure';
+    try { localStorage.setItem('jwt', token); } catch {}
+  }
+
+  // Sessão já salva? Oferece continuar com um clique
+  try {
+    const token = localStorage.getItem('jwt');
+    const dados = token && lerToken(token);
+    const nome = dados?.user?.username;
+    if (nome) {
+      $('perfil-nome').textContent = nome;
+      $('avatar').textContent = nome[0].toUpperCase();
+      $('perfil-ir').href = '/' + encodeURIComponent(nome) + '/files/';
+      $('continuar').hidden = false;
+    }
+  } catch {}
+
+  $('login').addEventListener('submit', async e => {
     e.preventDefault();
-    location.href = '/' + document.getElementById('nome').value.trim().toLowerCase() + '/';
+    const usuario = $('usuario').value.trim().toLowerCase();
+    const senha = $('senha').value;
+    const erro = $('erro');
+    erro.hidden = true;
+
+    if (!/^[a-z][a-z0-9-]+$/.test(usuario) || !senha) {
+      erro.textContent = 'Preencha usuário e senha.';
+      erro.hidden = false;
+      return;
+    }
+
+    $('entrar').disabled = true;
+    $('entrar').lastChild.textContent = ' Carregando save…';
+    try {
+      const r = await fetch('/' + usuario + '/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usuario, password: senha, recaptcha: '' })
+      });
+      if (r.status !== 200) throw new Error(r.status);
+      guardarSessao(await r.text());
+      location.href = '/' + usuario + '/files/';
+    } catch {
+      erro.textContent = 'Usuário ou senha incorretos.';
+      erro.hidden = false;
+      $('entrar').disabled = false;
+      $('entrar').lastChild.textContent = ' Entrar';
+      $('senha').select();
+    }
   });
 </script>
 </html>

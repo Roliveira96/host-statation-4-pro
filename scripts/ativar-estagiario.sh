@@ -52,6 +52,7 @@ docker run --rm --user "$USER_UID:$USER_GID" -v "/home/$NOME:/home/$NOME" \
     --entrypoint sh filebrowser/filebrowser:v2.31.2 \
     -c "mkdir -p /home/$NOME/public_html /home/$NOME/privado; rm -rf /home/$NOME/.painel"
 docker volume create "estagio-painel-$NOME" >/dev/null
+docker stop "painel-$NOME" >/dev/null 2>&1 || true   # o banco do painel não aceita dois processos
 docker run --rm -v "estagio-painel-$NOME:/dados" \
     -e NOME="$NOME" -e SENHA="$PAINEL_SENHA" -e DONO="$USER_UID:$USER_GID" \
     --entrypoint sh filebrowser/filebrowser:v2.31.2 -c '
@@ -62,6 +63,9 @@ docker run --rm -v "estagio-painel-$NOME:/dados" \
             --branding.name "PlayStagiário 4 · $NOME" --auth.method json \
             --locale pt-br --perm.execute=false --commands "" >/dev/null 2>&1
     fi
+    # Visual: tema escuro, combinando com a tela de login do PlayStagiário 4
+    /filebrowser -d "$DB" config set --branding.theme dark \
+        --branding.name "PlayStagiário 4 · $NOME" >/dev/null 2>&1
     if ! /filebrowser -d "$DB" users find "$NOME" >/dev/null 2>&1; then
         /filebrowser -d "$DB" users add "$NOME" "$SENHA" \
             --perm.admin=false --perm.execute=false --locale pt-br >/dev/null 2>&1

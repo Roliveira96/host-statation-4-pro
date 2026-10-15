@@ -114,6 +114,13 @@ Já sobem com o passo 3. Resumo do que roda:
 | `web-<nome>` | Apache + PHP 8.3, roda como o estagiário | (só pelo nginx) |
 | `painel-<nome>` | File Browser, via `painel.<dominio>/<nome>/` | (só pelo nginx) |
 
+O painel tem uma tela de login própria em `painel.<dominio>` (usuário e senha
+juntos). Ela faz o login no File Browser do estagiário e já abre a pasta dele;
+a tela de login do File Browser redireciona para ela.
+
+Ao mudar o `proxy/html/estilo.css`, aumente o `?v=` no link das páginas: a
+Cloudflare guarda CSS em cache por horas.
+
 No PHP, o banco é `host=mariadb`, porta 3306, com o usuário e a senha do
 estagiário. Ele só cria e acessa bancos com o prefixo `<nome>_`.
 
