@@ -77,7 +77,8 @@ Windows 10 e 11.
 
 ### 2. Criar sua chave SSH (estagiários)
 
-As contas não têm senha: o login é por chave.
+As contas não têm senha de SSH (a do painel não serve aqui): o login é por
+chave. Se o administrador preferir, ele pode criar uma senha de SSH para você.
 
 ```bash
 ssh-keygen -t ed25519
@@ -212,6 +213,33 @@ scripts/estagio ps                         # docker compose do projeto inteiro
 ```
 
 As senhas geradas ficam em `credenciais/<nome>.txt`, fora do Git.
+
+### Logins de cada estagiário
+
+São três logins separados. A senha de um não serve no outro.
+
+| Onde | Usuário | Senha |
+|---|---|---|
+| Painel (`painel.<dominio>`) | `<nome>` | `PAINEL_SENHA` em `credenciais/<nome>.txt` |
+| Banco / phpMyAdmin (`db.<dominio>`) | `<nome>` | `BANCO_SENHA` em `credenciais/<nome>.txt` |
+| SSH (`ssh.<dominio>`) | `<nome>` | nenhuma: a conta não tem senha |
+
+Para ver as senhas de alguém:
+
+```bash
+cat credenciais/estagiario1.txt
+```
+
+Para o SSH há dois caminhos:
+
+- **Chave SSH (recomendado):** o estagiário manda o `.pub` e você roda
+  `scripts/chave-ssh.sh <nome> id_ed25519.pub`. Veja "Acesso por SSH".
+- **Senha de SSH:** mais simples para quem está começando:
+  ```bash
+  sudo passwd <nome>
+  ```
+  O SSH só é alcançável pelo túnel (nenhuma porta aberta), o que reduz o
+  risco, mas uma senha fraca ou vazada ainda deixa entrar.
 
 ## Estrutura
 
