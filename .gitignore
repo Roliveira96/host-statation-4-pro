@@ -1,0 +1,10 @@
+# segredos (senhas, tokens do túnel)
+.env
+*.env
+!*.env.example
+credentials/
+*.json.cred
+
+# discos dos estagiários e dados de serviços
+*.img
+data/
