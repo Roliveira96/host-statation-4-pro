@@ -106,7 +106,8 @@ Aperte Enter nas perguntas e mande para o administrador **só** o arquivo
 `.pub` (no Windows: `C:\Users\<você>\.ssh\id_ed25519.pub`). O outro arquivo,
 sem `.pub`, é secreto e não sai do seu computador.
 
-O administrador cadastra com:
+O administrador cadastra com (passo a passo completo em
+[docs/novo-estagiario.md](docs/novo-estagiario.md)):
 
 ```bash
 scripts/chave-ssh.sh estagiario1 id_ed25519.pub
@@ -242,6 +243,10 @@ scripts/estagio ps                         # docker compose do projeto inteiro
 ```
 
 As senhas geradas ficam em `credenciais/<nome>.txt`, fora do Git.
+
+> 📋 **Chegou estagiário novo?** Siga o
+> [checklist passo a passo](docs/novo-estagiario.md): criar a conta, liberar
+> o SSH, conferir e a mensagem pronta para mandar a ele.
 
 ### Logins de cada estagiário
 
