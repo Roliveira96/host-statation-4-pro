@@ -63,6 +63,25 @@ server {
     }
 }
 
+# NAS estilo Google Drive (Cloudreve): nas.<dominio>
+server {
+    listen 80;
+    server_name nas.${DOMINIO};
+    error_page 502 504 =503 /nas-desligado.html;
+
+    location / {
+        proxy_request_buffering off;    # uploads vão em pedaços de 25 MB
+        proxy_buffering off;            # vídeos e downloads grandes saem direto
+        proxy_read_timeout 300s;
+        set $alvo estagio-nas;
+        proxy_pass http://$alvo:5212;
+    }
+    location = /nas-desligado.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+}
+
 # Sites dos estagiários: <nome>.<dominio>
 server {
     listen 80;

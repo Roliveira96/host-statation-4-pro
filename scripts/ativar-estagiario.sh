@@ -102,3 +102,8 @@ echo "   banco: usuário $NOME com acesso a ${NOME}_*"
 # 5. Sobe tudo
 scripts/estagio up -d --build "web-$NOME" "painel-$NOME" proxy phpmyadmin
 echo "   pronto. Credenciais em $CRED"
+
+# 6. Conta no NAS (nas.<dominio>), se o NAS estiver no ar
+if docker ps --format '{{.Names}}' | grep -qx estagio-nas; then
+    scripts/nas.py adicionar "$NOME"
+fi

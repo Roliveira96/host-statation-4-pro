@@ -284,8 +284,9 @@ imagens/php/        imagem Apache + PHP 8.3 que roda como o estagiário
 proxy/              config do nginx, tela de login do painel e páginas temáticas
 modelos/            página de boas-vindas que cada estagiário recebe
 config/             phpMyAdmin (português) e sistema (swap em zram)
-scripts/            configurar-sistema.sh e novo-estagiario.sh (sudo), ativar-estagiario.sh,
-                    chave-ssh.sh, estagio
+servicos/           NAS estilo Google Drive (Cloudreve), entra depois do disco do NAS
+scripts/            configurar-sistema.sh, configurar-nas.sh e novo-estagiario.sh (sudo),
+                    ativar-estagiario.sh, chave-ssh.sh, nas.py, estagio
 scripts/prints/     tira os prints deste README entrando como estagiário
 docs/               arquitetura, instalação e prints
 credenciais/, .env  senhas (ignorados pelo Git)
@@ -305,6 +306,7 @@ credenciais/, .env  senhas (ignorados pelo Git)
 - [ ] SSH dos estagiários num container isolado (hoje cai no sistema do servidor)
 - [ ] Login por e-mail (Cloudflare Access) na frente do SSH e do phpMyAdmin
 - [ ] Bloqueio da rede interna para os estagiários
+- [ ] NAS estilo Google Drive (Cloudreve) em `nas.rmo.dev.br`: scripts prontos e testados num Cloudreve temporário; falta rodar `sudo scripts/configurar-nas.sh` e `scripts/nas.py iniciar`
 
 ## Segredos
 

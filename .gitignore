@@ -13,3 +13,4 @@ estagiarios/*.yaml
 *.img
 data/
 node_modules/
+__pycache__/

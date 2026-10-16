@@ -1,0 +1,18 @@
+# NAS estilo Google Drive (Cloudreve) em nas.<dominio>.
+# Incluído pelo scripts/estagio só depois de existir /srv/nas/dados
+# (sudo scripts/configurar-nas.sh). Usuários e configurações: scripts/nas.py.
+services:
+  nas:
+    image: cloudreve/cloudreve:4.19.1
+    container_name: estagio-nas
+    volumes:
+      - type: bind
+        source: /srv/nas/dados
+        target: /cloudreve/data
+        bind:
+          create_host_path: false   # sem o disco montado, não sobe
+    networks: [estagio]
+    # Parado gasta ~200 MB; a folga é para as miniaturas de vídeo e documento
+    # (ffmpeg e LibreOffice), que pesam na hora de gerar
+    mem_limit: 1g
+    restart: unless-stopped
