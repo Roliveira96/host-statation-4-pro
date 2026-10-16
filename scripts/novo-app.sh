@@ -82,6 +82,8 @@ EOF
 
 # 3. Sobe o app e recarrega o nginx
 scripts/estagio up -d proxy "app-$NOME"
+# o nginx pode ter acabado de ser recriado: espera ele subir antes do reload
+for _ in {1..20}; do docker exec estagio-proxy test -s /run/nginx.pid 2>/dev/null && break; sleep 0.5; done
 docker exec estagio-proxy nginx -t -q
 docker exec estagio-proxy nginx -s reload
 

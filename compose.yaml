@@ -15,7 +15,9 @@ services:
       - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./proxy/html:/usr/share/nginx/html:ro
       - ./proxy/apps:/etc/nginx/apps:ro
-    networks: [estagio]
+    # estagio-apps: borda dos projetos do administrador (campingsite etc.).
+    # Os containers dos estagiários não entram nela, então não enxergam esses projetos.
+    networks: [estagio, estagio-apps]
     mem_limit: 64m
     restart: unless-stopped
 
@@ -76,6 +78,8 @@ services:
 networks:
   estagio:
     name: estagio
+  estagio-apps:
+    name: estagio-apps
 
 volumes:
   mariadb:

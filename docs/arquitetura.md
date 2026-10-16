@@ -69,3 +69,23 @@ script de novo com outro valor.
   `<nome>_`.
 - Estagiários nunca entram no grupo `docker` (equivale a ser root).
 - Usuários Linux são criados sem senha; acesso por chave SSH ou pelo painel.
+
+## Projetos do administrador (fora deste repositório)
+
+Projetos maiores do administrador (com banco, filas etc.) vivem no git deles e
+só se plugam aqui:
+
+- **Rota:** o projeto grava um arquivo em `proxy/apps/<projeto>.conf` (fora do
+  Git) com `server_name` exato; o nginx inclui todos. Nome exato ganha do
+  coringa `<estagiário>.<dominio>`, e a rota coringa do túnel já traz qualquer
+  subdomínio de um nível.
+- **Rede:** os containers públicos do projeto entram na rede `estagio-apps`,
+  onde só está o nginx. Os containers dos estagiários ficam na `estagio` e não
+  enxergam esses projetos; o resto do projeto fica numa rede interna dele.
+- **Portas:** nada de porta pública no host (80 é do nginx, 3306 do MariaDB);
+  painéis internos só em `127.0.0.1`.
+- **RAM:** o projeto roda numa slice própria com teto (`cgroup_parent`), como
+  os estagiários.
+
+Exemplo: o CamperSite, com o deploy em `deploy/ps4/` do
+[repositório dele](https://github.com/Roliveira96/system-for-campers-and-caravanners).
