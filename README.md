@@ -11,6 +11,11 @@ Ele já salvou Kratos, Aloy e o Spider-Man. Agora tem a missão mais difícil
 da carreira: hospedar o primeiro `index.php` do estagiário. Aquele com
 `<?php echo "teste"; ?>` e três `var_dump` esquecidos.
 
+> 🐧 **Como o Linux foi parar no PS4?** Isso está no projeto irmão
+> [**ubuntu-server-on-ps4**](https://github.com/Roliveira96/ubuntu-server-on-ps4): jailbreak, kernel, Ubuntu 26.04 numa
+> imagem dentro do HD (sem apagar os jogos) e a pós-instalação (Wi-Fi, IP
+> fixo, GPU, Docker). Este repositório começa onde aquele termina.
+
 > ⚠️ Nenhum console foi maltratado na produção deste projeto. Ele só foi
 > promovido de "centro de entretenimento" para "infraestrutura crítica" sem
 > aumento salarial.
@@ -225,7 +230,8 @@ infinito do Ricardo pode derrubar tudo, mas aí é gestão.
 - Linux com systemd e cgroup v2 (testado no Ubuntu 26.04)
 - Docker com cgroup driver `systemd` e Docker Compose
 - Domínio com DNS na Cloudflare (plano Free basta)
-- Um PS4 é opcional, mas recomendado pelo estilo
+- Um PS4 é opcional, mas recomendado pelo estilo. Para transformar o seu em
+  servidor, siga o [ubuntu-server-on-ps4](https://github.com/Roliveira96/ubuntu-server-on-ps4) até a pós-instalação
 - Um PS5 também serve, mas aí você é rico e devia estar pagando a AWS
 
 ## Como montar do zero

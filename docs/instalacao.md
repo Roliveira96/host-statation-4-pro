@@ -29,6 +29,16 @@ Para replicar em outra máquina, troque `rmo.dev.br` pelo seu domínio e use
 o seu próprio túnel da Cloudflare: cada instalação tem o seu `.env`, as suas
 senhas e os seus estagiários (nem que sejam você mesmo com nomes diferentes).
 
+## 0. Linux no PS4
+
+Se a máquina é um PS4, antes de tudo ele precisa virar um Ubuntu Server. O
+passo a passo completo (jailbreak, kernel, instalação na imagem do HD e a
+pós-instalação) está no projeto irmão
+[**ubuntu-server-on-ps4**](https://github.com/Roliveira96/ubuntu-server-on-ps4). Siga até a
+[conferência final da pós-instalação](https://github.com/Roliveira96/ubuntu-server-on-ps4#58-conferência-final):
+Wi-Fi, IP fixo, GPU e Docker prontos. Em qualquer outro PC com Ubuntu, pule
+para o passo 1.
+
 ## 1. Preparar a máquina
 
 ```bash
@@ -36,6 +46,10 @@ sudo apt install -y docker.io docker-compose-v2 git
 sudo usermod -aG docker $USER      # só o administrador, nunca estagiários
 docker info | grep -i "cgroup"     # precisa ser: systemd e versão 2
 ```
+
+No PS4, o Docker já vem do `ps4-install-docker.sh` do
+[ubuntu-server-on-ps4](https://github.com/Roliveira96/ubuntu-server-on-ps4) (repositório oficial da Docker): instale só o
+`git`.
 
 Depois de clonar o repositório (passo 2), ajuste o sistema uma vez:
 
