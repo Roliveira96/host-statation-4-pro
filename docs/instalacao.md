@@ -209,3 +209,8 @@ README.
 
 *(a fazer: SSH dos estagiários num container isolado; login por e-mail com
 Cloudflare Access)*
+
+## 8. Apps Go do administrador (opcional)
+
+Projetos Go seus em subdomínio ou domínio próprio, sem Dockerfile: veja
+[apps-go.md](apps-go.md).

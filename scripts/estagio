@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Atalho para o docker compose do projeto: junta compose.yaml com os
-# arquivos de cada estagiário (estagiarios/<nome>.yaml) e o NAS
+# arquivos de cada estagiário (estagiarios/<nome>.yaml), dos apps do
+# administrador (apps/<nome>.yaml) e o NAS
 # (servicos/nas.yaml, só depois de sudo scripts/configurar-nas.sh).
 # Exemplos:  scripts/estagio up -d      scripts/estagio ps      scripts/estagio logs -f web-estagiario1
 set -euo pipefail
@@ -9,6 +10,9 @@ cd "$(dirname "$0")/.."
 arquivos=compose.yaml
 for f in estagiarios/*.yaml; do
     [[ $f == estagiarios/_modelo.yaml ]] || arquivos+=":$f"
+done
+for f in apps/*.yaml; do
+    [[ $f == apps/_modelo.yaml ]] || arquivos+=":$f"
 done
 [[ -d /srv/nas/dados ]] && arquivos+=":servicos/nas.yaml"
 

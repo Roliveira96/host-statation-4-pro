@@ -14,6 +14,7 @@ services:
     volumes:
       - ./proxy/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./proxy/html:/usr/share/nginx/html:ro
+      - ./proxy/apps:/etc/nginx/apps:ro
     networks: [estagio]
     mem_limit: 64m
     restart: unless-stopped

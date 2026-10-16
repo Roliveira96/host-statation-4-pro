@@ -1,0 +1,28 @@
+# Modelo usado por scripts/novo-app.sh (apps Go do administrador, não de estagiário).
+# __NOME__, __PASTA__, __PORTA__, __MEMORIA__, __UID__, __GID__ e __CACHE__
+# são trocados pelo script.
+#
+# Sem Dockerfile e sem imagem própria: a imagem oficial do Go compila o código
+# da pasta a cada (re)início e roda o binário. O cache de compilação e de
+# módulos fica fora do container, então só o primeiro build é demorado.
+services:
+  app-__NOME__:
+    image: golang:1.27-alpine
+    container_name: app-__NOME__
+    user: "__UID__:__GID__"
+    working_dir: /app
+    command: ["sh", "-c", "go build -buildvcs=false -o /tmp/app . && exec /tmp/app"]
+    environment:
+      PORT: "__PORTA__"                  # o app deve ouvir em :$PORT
+      HOME: /tmp
+      GOCACHE: /cache/build
+      GOMODCACHE: /cache/mod
+    env_file:
+      - path: __PASTA__/.env             # variáveis do projeto (opcional)
+        required: false
+    volumes:
+      - __PASTA__:/app:ro                # código só leitura: o build sai em /tmp
+      - __CACHE__:/cache
+    networks: [estagio]                  # enxerga mariadb:3306
+    mem_limit: __MEMORIA__
+    restart: unless-stopped

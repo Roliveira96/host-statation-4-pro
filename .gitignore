@@ -8,6 +8,9 @@ credenciais/
 # arquivos gerados por estagiário (têm nomes reais; o modelo fica)
 estagiarios/*.yaml
 !estagiarios/_modelo.yaml
+apps/*.yaml
+!apps/_modelo.yaml
+proxy/apps/*.conf
 
 # discos dos estagiários e dados de serviços
 *.img

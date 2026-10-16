@@ -290,9 +290,11 @@ imagens/php/        imagem Apache + PHP 8.3 que roda como o estagiário
 proxy/              config do nginx, tela de login do painel e páginas temáticas
 modelos/            página de boas-vindas que cada estagiário recebe
 config/             phpMyAdmin (português) e sistema (swap em zram)
+apps/               modelo dos apps Go do administrador (scripts/novo-app.sh)
 servicos/           NAS estilo Google Drive (Cloudreve), entra depois do disco do NAS
 scripts/            configurar-sistema.sh, configurar-nas.sh e novo-estagiario.sh (sudo),
-                    ativar-estagiario.sh, chave-ssh.sh, nas.py, estagio
+                    ativar-estagiario.sh, chave-ssh.sh, nas.py, estagio,
+                    novo-app.sh e remover-app.sh (apps Go)
 scripts/prints/     tira os prints deste README entrando como estagiário
 docs/               arquitetura, instalação e prints
 credenciais/, .env  senhas (ignorados pelo Git)
@@ -309,6 +311,7 @@ credenciais/, .env  senhas (ignorados pelo Git)
 - [x] MariaDB + phpMyAdmin com usuário por estagiário
 - [x] File Browser (painel), um por estagiário
 - [x] SSH pelo túnel (`ssh.rmo.dev.br`)
+- [x] Apps Go do administrador em subdomínio ou domínio próprio, sem Dockerfile ([docs/apps-go.md](docs/apps-go.md))
 - [ ] SSH dos estagiários num container isolado (hoje cai no sistema do servidor)
 - [ ] Login por e-mail (Cloudflare Access) na frente do SSH e do phpMyAdmin
 - [ ] Bloqueio da rede interna para os estagiários
@@ -328,6 +331,9 @@ troque a senha, porque a essa altura ela já está num print do grupo da famíli
 - Corrigido bug em que o PS4 achava que ainda era um videogame.
 - O PHP agora roda como o próprio estagiário. Erros também são dele agora.
 - Adicionada swap em zram. A RAM aprendeu a fazer origami.
+- O administrador agora também hospeda os próprios apps Go. O PS4 passou a
+  compilar Go com a mesma CPU que um dia renderizou o Kratos. Ele não reclama,
+  só gira a ventoinha.
 - Removido o modo "Descanso". Servidor não descansa. Estagiário também não, mas esse bug é do RH.
 - Problemas conhecidos: o Ricardo às vezes quer jogar Celeste. Sem previsão de correção.
 

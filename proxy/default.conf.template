@@ -82,6 +82,11 @@ server {
     }
 }
 
+# Apps do administrador (Go etc.): um arquivo por app, gerado por
+# scripts/novo-app.sh. Nome exato (api.<dominio> ou outro domínio) ganha do
+# coringa dos estagiários logo abaixo.
+include /etc/nginx/apps/*.conf;
+
 # Sites dos estagiários: <nome>.<dominio>
 server {
     listen 80;
